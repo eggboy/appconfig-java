@@ -1,0 +1,37 @@
+spring:
+  cloud:
+    azure:
+      appconfiguration:
+        stores[0]:
+          endpoint: https://appconf-java.azconfig.io
+          selects[0]:
+            key-filter: /${spring.application.name}/
+        credential:
+          managed-identity-enabled: true
+        enabled: true
+  application:
+    name: appconfig-java
+  config:
+    activate:
+      on-profile: containerapps
+---
+spring:
+  cloud:
+    azure:
+      appconfiguration:
+        enabled: true
+        stores[0]:
+          monitoring:
+            enabled: true
+            refresh-interval: 5s
+            triggers[0]:
+              key: refresh-key
+              label: dev
+          connection-string: ${APP_CONFIGURATION_CONNECTION_STRING}
+          selects[0]:
+            key-filter: /${spring.application.name}/
+  application:
+    name: appconfig-java
+  config:
+    activate:
+      on-profile: dev
